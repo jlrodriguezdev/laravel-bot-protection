@@ -73,6 +73,24 @@ Publicar configuración:
 php artisan vendor:publish --provider="Jlrodriguezdev\BotProtection\BotProtectionServiceProvider"
 ```
 
+> 💡 **Nota Importante sobre Pruebas y Whitelist**:  
+> Si pruebas el middleware ejecutando `curl` directamente **desde la consola SSH de tu propio servidor**, la petición proviene de `127.0.0.1` o la IP pública de tu servidor. Dado que esas IPs están en la lista blanca (`whitelist_ips`) para evitar que los Cron jobs internos y comandos de consola se auto-bloqueen, el servidor responderá legítimamente `200 OK`.  
+> Para verificar el bloqueo real en combate, lanza la prueba con `curl` desde una **máquina o laptop externa**:
+> ```bash
+> # Desde tu ordenador externo:
+> curl -s -i -A "curl/8.4.0" "https://tudominio.com/"
+> # Respuesta: HTTP 403 Forbidden ("errors.bot-detected")
+> ```
+> O pruébalo programáticamente con Tinker:
+> ```bash
+> php artisan tinker --execute="
+> \$req = \Illuminate\Http\Request::create('/', 'GET', [], [], [], ['HTTP_USER_AGENT' => 'curl/8.4.0', 'REMOTE_ADDR' => '1.2.3.4']);
+> \$res = app(\Jlrodriguezdev\BotProtection\Middleware\BotProtection::class)->handle(\$req, fn(\$r) => 'OK');
+> echo 'Status: ' . (is_string(\$res) ? \$res : \$res->getStatusCode()) . PHP_EOL;
+> "
+> # Salida: Status: 403
+> ```
+
 ---
 
 ### 4. Diagrama de Flujo

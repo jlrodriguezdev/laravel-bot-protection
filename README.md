@@ -81,13 +81,33 @@ return [
     'rate_limit' => env('BOT_PROTECTION_RATE_LIMIT', 60),
     'strike_threshold' => 3,
     'whitelist_ips' => [
-        // '127.0.0.1',
+        '127.0.0.1',
+        '::1',
+        // 'your.server.public.ip', // Whitelist server's own IP so internal CLI/cron calls are never blocked
     ],
     'blacklisted_ips' => [
         //
     ],
 ];
 ```
+
+> 💡 **Important Note on Whitelist Testing**:  
+> If you test the middleware by running `curl` directly from **inside the server via SSH**, the request originates from `127.0.0.1` or the server's public IP. Because those IPs are whitelisted to prevent local Cron jobs and artisan daemons from locking themselves out, the server will legitimately return `200 OK`.  
+> To test real bot blocking, run the `curl` probe from an **external workstation or laptop**:
+> ```bash
+> # Run this from your laptop or external IP:
+> curl -s -i -A "curl/8.4.0" "https://yourdomain.com/"
+> # Response: HTTP 403 Forbidden ("errors.bot-detected")
+> ```
+> Or test programmatically via Tinker:
+> ```bash
+> php artisan tinker --execute="
+> \$req = \Illuminate\Http\Request::create('/', 'GET', [], [], [], ['HTTP_USER_AGENT' => 'curl/8.4.0', 'REMOTE_ADDR' => '1.2.3.4']);
+> \$res = app(\Jlrodriguezdev\BotProtection\Middleware\BotProtection::class)->handle(\$req, fn(\$r) => 'OK');
+> echo 'Status: ' . (is_string(\$res) ? \$res : \$res->getStatusCode()) . PHP_EOL;
+> "
+> # Output: Status: 403
+> ```
 
 ---
 

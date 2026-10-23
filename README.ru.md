@@ -73,6 +73,24 @@ protected $middlewareGroups = [
 php artisan vendor:publish --provider="Jlrodriguezdev\BotProtection\BotProtectionServiceProvider"
 ```
 
+> 💡 **Важное примечание по тестированию и белому списку (Whitelist)**:  
+> Если вы тестируете middleware командой `curl` прямо **из консоли SSH вашего собственного сервера**, запрос исходит от `127.0.0.1` или внешнего IP сервера. Поскольку эти IP-адреса находятся в белом списке (`whitelist_ips`), чтобы предотвратить блокировку локальных Cron-задач и очередей Laravel, сервер закономерно вернет `200 OK`.  
+> Чтобы проверить реальную блокировку ботов в бою, отправьте запрос `curl` с **внешнего компьютера или ноутбука**:
+> ```bash
+> # С вашего рабочего ноутбука:
+> curl -s -i -A "curl/8.4.0" "https://yourdomain.com/"
+> # Ответ: HTTP 403 Forbidden ("errors.bot-detected")
+> ```
+> Или проверьте программно через Tinker:
+> ```bash
+> php artisan tinker --execute="
+> \$req = \Illuminate\Http\Request::create('/', 'GET', [], [], [], ['HTTP_USER_AGENT' => 'curl/8.4.0', 'REMOTE_ADDR' => '1.2.3.4']);
+> \$res = app(\Jlrodriguezdev\BotProtection\Middleware\BotProtection::class)->handle(\$req, fn(\$r) => 'OK');
+> echo 'Status: ' . (is_string(\$res) ? \$res : \$res->getStatusCode()) . PHP_EOL;
+> "
+> # Результат: Status: 403
+> ```
+
 ---
 
 ### 4. Архитектура работы
