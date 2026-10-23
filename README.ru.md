@@ -1,5 +1,13 @@
 # 🛡️ Laravel BotProtection (Русский)
 
+<p align="center">
+  <a href="https://packagist.org/packages/jlrodriguezdev/laravel-bot-protection"><img src="https://img.shields.io/badge/пакет-jlrodriguezdev%2Flaravel--bot--protection-orange.svg?style=flat-square" alt="Пакет"></a>
+  <a href="https://php.net"><img src="https://img.shields.io/badge/php-%5E8.1%20%7C%20%5E8.2%20%7C%20%5E8.3%20%7C%20%5E8.4%20%7C%20%5E8.5-blue.svg?style=flat-square" alt="Версия PHP"></a>
+  <a href="https://laravel.com"><img src="https://img.shields.io/badge/laravel-%5E9.0%20%7C%20%5E10.0%20%7C%20%5E11.0-red.svg?style=flat-square" alt="Версия Laravel"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/лицензия-MIT-green.svg?style=flat-square" alt="Лицензия"></a>
+  <a href="https://latiru.ru"><img src="https://img.shields.io/badge/проверено%20в%20продакшене-latiru.ru-purple.svg?style=flat-square" alt="Проверено в продакшене"></a>
+</p>
+
 > **Высокопроизводительный Web Application Firewall (WAF) и Middleware для защиты Laravel от ботов**  
 > *Проверен в боевых условиях и работает в продакшене на платформе [LATIRU.RU](https://latiru.ru).*
 
