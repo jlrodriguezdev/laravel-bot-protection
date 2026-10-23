@@ -58,7 +58,9 @@ Tal y como quedó registrado en nuestro panel de **Laravel Telescope**:
 composer require jlrodriguezdev/laravel-bot-protection
 ```
 
-Registrar en `app/Http/Kernel.php`:
+Registrar en tu aplicación:
+
+**Para Laravel 9 y 10 (`app/Http/Kernel.php`):**
 ```php
 protected $middlewareGroups = [
     'web' => [
@@ -66,6 +68,15 @@ protected $middlewareGroups = [
         \Jlrodriguezdev\BotProtection\Middleware\BotProtection::class,
     ],
 ];
+```
+
+**Para Laravel 11 y 12 (`bootstrap/app.php`):**
+```php
+->withMiddleware(function (Middleware $middleware) {
+    $middleware->web(append: [
+        \Jlrodriguezdev\BotProtection\Middleware\BotProtection::class,
+    ]);
+})
 ```
 
 Publicar configuración:

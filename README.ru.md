@@ -58,7 +58,9 @@ GET  /.vscode/sftp.json                                 -> 404 (Защищено
 composer require jlrodriguezdev/laravel-bot-protection
 ```
 
-Подключение в `app/Http/Kernel.php`:
+Подключение в приложении:
+
+**Для Laravel 9 и 10 (`app/Http/Kernel.php`):**
 ```php
 protected $middlewareGroups = [
     'web' => [
@@ -66,6 +68,15 @@ protected $middlewareGroups = [
         \Jlrodriguezdev\BotProtection\Middleware\BotProtection::class,
     ],
 ];
+```
+
+**Для Laravel 11 и 12 (`bootstrap/app.php`):**
+```php
+->withMiddleware(function (Middleware $middleware) {
+    $middleware->web(append: [
+        \Jlrodriguezdev\BotProtection\Middleware\BotProtection::class,
+    ]);
+})
 ```
 
 Публикация конфигурации и представлений:

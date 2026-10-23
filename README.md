@@ -3,7 +3,7 @@
 <p align="center">
   <a href="https://packagist.org/packages/jlrodriguezdev/laravel-bot-protection"><img src="https://img.shields.io/badge/package-jlrodriguezdev%2Flaravel--bot--protection-orange.svg?style=flat-square" alt="Package"></a>
   <a href="https://php.net"><img src="https://img.shields.io/badge/php-%5E8.1%20%7C%20%5E8.2%20%7C%20%5E8.3%20%7C%20%5E8.4%20%7C%20%5E8.5-blue.svg?style=flat-square" alt="PHP Version"></a>
-  <a href="https://laravel.com"><img src="https://img.shields.io/badge/laravel-%5E9.0%20%7C%20%5E10.0%20%7C%20%5E11.0-red.svg?style=flat-square" alt="Laravel Version"></a>
+  <a href="https://laravel.com"><img src="https://img.shields.io/badge/laravel-%5E9.0%20%7C%20%5E10.0%20%7C%20%5E11.0%20%7C%20%5E12.0-red.svg?style=flat-square" alt="Laravel Version"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-green.svg?style=flat-square" alt="License"></a>
   <a href="https://latiru.ru"><img src="https://img.shields.io/badge/tested%20in%20production-latiru.ru-purple.svg?style=flat-square" alt="Battle Tested in Production"></a>
 </p>
@@ -57,7 +57,9 @@
 composer require jlrodriguezdev/laravel-bot-protection
 ```
 
-#### Register in `app/Http/Kernel.php`:
+#### Register in your application:
+
+**For Laravel 9 & 10 (`app/Http/Kernel.php`):**
 ```php
 protected $middlewareGroups = [
     'web' => [
@@ -65,6 +67,15 @@ protected $middlewareGroups = [
         \Jlrodriguezdev\BotProtection\Middleware\BotProtection::class,
     ],
 ];
+```
+
+**For Laravel 11 & 12 (`bootstrap/app.php`):**
+```php
+->withMiddleware(function (Middleware $middleware) {
+    $middleware->web(append: [
+        \Jlrodriguezdev\BotProtection\Middleware\BotProtection::class,
+    ]);
+})
 ```
 
 #### Publish Configuration & Views:
