@@ -46,6 +46,23 @@ class BotProtection
             return $this->respondBlocked('Su dirección IP ha sido bloqueada por actividades sospechosas.');
         }
 
+        // 4.5. Secret & Credential Scanning Auto-Ban (Immediate 403 & Auto-Blacklist)
+        if (config('bot-protection.block_credential_scans', true)) {
+            $lowerUri = strtolower($request->getRequestUri());
+            $regex = config('bot-protection.credential_scan_regex', '/(\.env|\.git|\.aws|\.ssh|credentials\.json|firebase.*\.json|service-account.*\.json|phpinfo|\.bak|\.old|\.save)/i');
+            
+            if (preg_match($regex, $lowerUri)) {
+                $this->logEvent($request, 'blocked', "Credential or sensitive file scan attempt: {$lowerUri}");
+                
+                // Add IP immediately to dynamic blacklist
+                $cachedBlacklist[] = $ip;
+                Cache::forever('bot_blacklisted_ips_cache', array_unique($cachedBlacklist));
+                Log::alert("[BotProtection] Malicious scanning IP {$ip} banned for querying {$lowerUri}");
+
+                return $this->respondBlocked('Acceso denegado: Intento de escaneo de seguridad detectado y bloqueado.');
+            }
+        }
+
         // 5. Automated Scraper / Headless Signature Detection
         $botPatterns = config('bot-protection.bot_patterns', []);
         foreach ($botPatterns as $pattern) {

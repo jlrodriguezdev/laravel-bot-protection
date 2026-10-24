@@ -133,6 +133,16 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Secret & Credential Scanning Auto-Ban
+    |--------------------------------------------------------------------------
+    | Immediate 403 blocking and auto-blacklisting when malicious bots scan for
+    | sensitive files (.env, .git, .aws, credentials.json, phpinfo, backups).
+    */
+    'block_credential_scans' => env('BOT_PROTECTION_BLOCK_CREDENTIAL_SCANS', true),
+    'credential_scan_regex' => '/(\.env|\.git|\.aws|\.ssh|credentials\.json|firebase.*\.json|service-account.*\.json|phpinfo|\.bak|\.old|\.save)/i',
+
+    /*
+    |--------------------------------------------------------------------------
     | Challenge Mode
     |--------------------------------------------------------------------------
     | Options: 'off', 'medium', 'hard', 'under_attack'
