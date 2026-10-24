@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Verificación de Seguridad</title>
+    <title>Security Verification | Bot Protection</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-950 text-white min-h-screen flex items-center justify-center p-4 font-sans">
@@ -11,9 +11,9 @@
         <div class="w-16 h-16 bg-blue-500/10 border border-blue-500/20 text-blue-400 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl font-bold animate-pulse">
             🔍
         </div>
-        <h1 class="text-xl font-bold mb-2">Comprobando su navegador...</h1>
+        <h1 class="text-xl font-bold mb-2">Verifying your browser...</h1>
         <p class="text-sm text-gray-400 mb-6">
-            Por favor, espere un segundo mientras verificamos la seguridad de su conexión.
+            Please wait a moment while we verify the security of your connection.
         </p>
         <script>
             setTimeout(function() {
@@ -21,6 +21,9 @@
                 window.location.href = "{{ $redirectTo ?? '/' }}";
             }, 1000);
         </script>
+        <div class="text-xs text-gray-500 border-t border-gray-800 pt-4">
+            Protected by <span class="text-gray-300 font-semibold">Laravel BotProtection</span>
+        </div>
     </div>
 </body>
 </html>

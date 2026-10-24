@@ -43,7 +43,7 @@ class BotProtection
 
         if (in_array($ip, $blacklistedIps, true)) {
             $this->logEvent($request, 'blocked', 'IP address is permanently blacklisted.');
-            return $this->respondBlocked('Su dirección IP ha sido bloqueada por actividades sospechosas.');
+            return $this->respondBlocked('Your IP address has been permanently blocked due to suspicious activity.');
         }
 
         // 4.5. Secret & Credential Scanning Auto-Ban (Immediate 403 & Auto-Blacklist)
@@ -59,7 +59,7 @@ class BotProtection
                 Cache::forever('bot_blacklisted_ips_cache', array_unique($cachedBlacklist));
                 Log::alert("[BotProtection] Malicious scanning IP {$ip} banned for querying {$lowerUri}");
 
-                return $this->respondBlocked('Acceso denegado: Intento de escaneo de seguridad detectado y bloqueado.');
+                return $this->respondBlocked('Access denied: Malicious security scan attempt detected and blocked.');
             }
         }
 
@@ -68,7 +68,7 @@ class BotProtection
         foreach ($botPatterns as $pattern) {
             if (stripos($userAgent, $pattern) !== false) {
                 $this->logEvent($request, 'blocked', "Automated scraper pattern detected: {$pattern}");
-                return $this->respondBlocked('Acceso no permitido para herramientas automatizadas.');
+                return $this->respondBlocked('Access denied: Automated scrapers and headless tools are not permitted.');
             }
         }
 
